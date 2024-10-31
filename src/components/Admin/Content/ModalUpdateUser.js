@@ -3,11 +3,11 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { FcPlus } from "react-icons/fc";
 import { toast } from "react-toastify";
-import { CreateNewUser } from "../../../services/apiService";
+import { putUpdateUser } from "../../../services/apiService";
 import _ from "lodash";
 
 const ModalUpdateUser = (props) => {
-  const { show, setShow, dataUpdate } = props;
+  const { show, setShow, dataUpdate, resetUpdateUser } = props;
   const handleClose = () => {
     setShow(false);
     setEmail("");
@@ -16,6 +16,7 @@ const ModalUpdateUser = (props) => {
     setRole("USER");
     setImage("");
     setPreviewImage("");
+    resetUpdateUser();
   };
 
   const [email, setEmail] = useState("");
@@ -53,19 +54,15 @@ const ModalUpdateUser = (props) => {
       );
   };
 
-  const handleSubmitCreateUser = async () => {
+  const handleSubmitUpdateUser = async () => {
     // validate
     const isValidEmail = validateEmail(email);
     if (!isValidEmail) {
       toast.error("Invalid email address");
       return;
     }
-    if (!password) {
-      toast.error("Password is required");
-      return;
-    }
 
-    let data = await CreateNewUser(email, password, username, role, image);
+    let data = await putUpdateUser(dataUpdate.id, username, role, image);
     if (data && data.EC === 0) {
       toast.success(data.EM);
       handleClose();
@@ -158,7 +155,7 @@ const ModalUpdateUser = (props) => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={() => handleSubmitCreateUser()}>
+          <Button variant="primary" onClick={() => handleSubmitUpdateUser()}>
             Save
           </Button>
         </Modal.Footer>

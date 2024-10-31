@@ -15,4 +15,14 @@ const getAllUser = () => {
   return axios.get("v1/participant/all");
 };
 
-export { CreateNewUser, getAllUser };
+const putUpdateUser = (id, username, role, image) => {
+  // call api
+  const data = new FormData();
+  data.append("id", id);
+  data.append("username", username);
+  data.append("role", role);
+  data.append("userImage", image);
+  return axios.put("v1/participant", data);
+};
+
+export { CreateNewUser, getAllUser, putUpdateUser };
