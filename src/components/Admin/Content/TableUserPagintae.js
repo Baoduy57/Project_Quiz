@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 
 const TableUserPaginate = (props) => {
-  const { listUser, fetchListUsersWithPaginate, pageCount } = props;
+  const { listUser, fetchListUsersWithPaginate, pageCount, setCurrentPage } =
+    props;
 
   const handlePageClick = (event) => {
     fetchListUsersWithPaginate(+event.selected + 1);
+    setCurrentPage(+event.selected + 1);
     console.log(`User requested page number ${event.selected}`);
   };
 
@@ -74,6 +75,7 @@ const TableUserPaginate = (props) => {
           containerClassName="pagination"
           activeClassName="active"
           renderOnZeroPageCount={null}
+          forcePage={props.currentPage - 1}
         />
       </div>
     </>
