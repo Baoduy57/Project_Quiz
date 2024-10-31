@@ -3,11 +3,15 @@ import ModalCreateUser from "./ModalCreateUser";
 import "./ManageUser.scss";
 import { FcPlus } from "react-icons/fc";
 import TableUser from "./TableUser";
-import { getAllUser } from "../../../services/apiService";
+import { getAllUser, getUserWithPaginate } from "../../../services/apiService";
 import ModalUpdateUser from "./ModalUpdateUser";
 import ModalDeleteUser from "./ModalDeleteUser";
+import TableUserPaginate from "./TableUserPagintae";
 
 const ManageUser = (props) => {
+  const LIMIT_USER = 6;
+  const [pageCount, setPageCount] = useState(0);
+
   const [showModalCreateUser, setShowModalCreateUser] = useState(false);
   const [listUser, setListUser] = useState([]);
   const [showModalUpdateUser, setShowModalUpdateUser] = useState(false);
@@ -16,13 +20,22 @@ const ManageUser = (props) => {
   const [dataDelete, setDataDelete] = useState({});
 
   useEffect(() => {
-    fetchListUsers();
+    // fetchListUsers();
+    fetchListUsersWithPaginate(1);
   }, []);
 
   const fetchListUsers = async () => {
     let res = await getAllUser();
     if (res.EC === 0) {
       setListUser(res.DT);
+    }
+  };
+
+  const fetchListUsersWithPaginate = async (page) => {
+    let res = await getUserWithPaginate(page, LIMIT_USER);
+    if (res.EC === 0) {
+      setListUser(res.DT.users);
+      setPageCount(res.DT.totalPages);
     }
   };
 
@@ -52,10 +65,18 @@ const ManageUser = (props) => {
           </button>
         </div>
         <div className="table-users-container">
-          <TableUser
+          {/* <TableUser
             listUser={listUser}
             handleClickBtnUpdate={handleClickBtnUpdate}
             handleClickBtnDelete={handleClickBtnDelete}
+          /> */}
+
+          <TableUserPaginate
+            listUser={listUser}
+            handleClickBtnUpdate={handleClickBtnUpdate}
+            handleClickBtnDelete={handleClickBtnDelete}
+            fetchListUsersWithPaginate={fetchListUsersWithPaginate}
+            pageCount={pageCount}
           />
         </div>
         <ModalCreateUser
