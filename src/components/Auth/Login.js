@@ -5,10 +5,11 @@ import { postLogin } from "../../services/apiService";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { doLogin } from "../../redux/action/userAction";
-
+import { ImSpinner6 } from "react-icons/im";
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -32,15 +33,18 @@ export const Login = () => {
       toast.error("Invalid password");
       return;
     }
+    setIsLoading(true);
     // call apis
     let data = await postLogin(email, password);
     if (data && data.EC === 0) {
       dispatch(doLogin(data));
       toast.success(data.EM);
+      setIsLoading(false);
       navigate("/");
     }
     if (data && data.EC !== 0) {
       toast.error(data.EM);
+      setIsLoading(false);
     }
   };
 
@@ -75,14 +79,18 @@ export const Login = () => {
         </div>
         <span className="forgot-password">Forgot password?</span>
         <div>
-          <button className="btn-submit" onClick={() => handeLogin()}>
-            Login to TBD
+          <button
+            className="btn-submit"
+            onClick={() => handeLogin()}
+            disabled={isLoading}
+          >
+            {isLoading === true && <ImSpinner6 className="loader-icon" />}
+            <span>Login to TBD</span>
           </button>
         </div>
         <div>
           <span
             className="back"
-            style={{ cursor: "pointer" }}
             onClick={() => {
               navigate("/");
             }}
