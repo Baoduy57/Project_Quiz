@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./ManageQuiz.scss";
 import Select from "react-select";
+import { postCreateNewQuiz } from "../../../../services/apiService";
+import { toast } from "react-toastify";
 
 const options = [
   { value: "EASY", label: "EASY" },
@@ -11,10 +13,33 @@ const options = [
 export const ManageQuiz = (props) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [type, setType] = useState("EASY");
+  const [type, setType] = useState("");
   const [image, setImage] = useState(null);
 
-  const handleChangeFile = (e) => {};
+  const handleChangeFile = (e) => {
+    if (e.target && e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
+
+  const handleSubmitQuiz = async () => {
+    // validate
+    if (!name || !description) {
+      toast.error("Name/ Description is required");
+      return;
+    }
+
+    let res = await postCreateNewQuiz(description, name, type?.value, image);
+    if (res && res.EC === 0) {
+      toast.success(res.EM);
+      setName("");
+      setDescription("");
+      setType("");
+      setImage(null);
+    } else {
+      toast.error(res.EM);
+    }
+  };
 
   return (
     <div className="quiz-container">
@@ -45,8 +70,8 @@ export const ManageQuiz = (props) => {
           </div>
           <div className="my-3">
             <Select
-              value={type}
-              // onChange={}
+              defaultValue={type}
+              onChange={setType}
               options={options}
               placeholder={"Quiz type..."}
             />
@@ -58,6 +83,14 @@ export const ManageQuiz = (props) => {
               className="form-control"
               onChange={(e) => handleChangeFile(e)}
             />
+          </div>
+          <div className="mt-3">
+            <button
+              className="btn btn-warning"
+              onClick={() => handleSubmitQuiz()}
+            >
+              Save
+            </button>
           </div>
         </fieldset>
       </div>
