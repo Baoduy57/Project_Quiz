@@ -108,6 +108,23 @@ const postCreateNewAnswerForQuestion = (
   });
 };
 
+const Logout = (email, refresh_token) => {
+  return axios.post("v1/logout", {
+    email,
+    refresh_token,
+  });
+};
+
+const postAssignQuiz = (quizId, userId) => {
+  return axios.post("v1/quiz-assign-to-user", {
+    quizId,
+    userId,
+  });
+};
+
+const getQuizWithQA = (quizId) => {
+  return axios.get(`v1/quiz-with-qa/${quizId}`);
+};
 export {
   CreateNewUser,
   getAllUser,
@@ -125,4 +142,7 @@ export {
   deleteQuizForAdmin,
   postCreateNewQuestionForQuiz,
   postCreateNewAnswerForQuestion,
+  Logout,
+  postAssignQuiz,
+  getQuizWithQA,
 };
