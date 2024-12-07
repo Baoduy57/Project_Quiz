@@ -14,7 +14,6 @@ import { ListQuiz } from "./components/User/ListQuiz";
 import { DetailQuiz } from "./components/User/DetailQuiz";
 import { ManageQuiz } from "./components/Admin/Content/Quiz/ManageQuiz";
 import { Questions } from "./components/Admin/Content/Question/Questions";
-import { Test1 } from "./routes/Test1";
 import { PrivateRoute } from "./routes/PrivateRoute";
 
 export const Layout = (props) => {
