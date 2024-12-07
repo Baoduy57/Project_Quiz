@@ -48,6 +48,10 @@ export const Login = () => {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e && e.key === "Enter") handeLogin();
+  };
+
   return (
     <div className="login-container">
       <div className="header">
@@ -75,6 +79,7 @@ export const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             className="form-control"
             placeholder="Enter your password"
+            onKeyDown={(e) => handleKeyDown(e)}
           />
         </div>
         <span className="forgot-password">Forgot password?</span>
